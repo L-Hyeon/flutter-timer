@@ -38,27 +38,64 @@ class ChoosePage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 50),
+          const SizedBox(height: 70),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Container(
                 width: 130,
-                height: 130,
-                color: Colors.white,
+                height: 100,
                 child: InkWell(
+                  child: Column(
+                    children: const <Widget> [
+                      Icon(
+                          Icons.access_alarm,
+                          size: 70,
+                          color: Colors.white
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Sleep",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "Cafe24"
+                        ),
+                      )
+                    ],
+                  ),
                   onTap: (){
 
                   },
-
-                ),
+                )
               ),
               Container(
-                width: 130,
-                height: 130,
-                color: Colors.white,
-                child: Text(""),
-              ),
+                  width: 130,
+                  height: 100,
+                  child: InkWell(
+                    child: Column(
+                      children: const <Widget> [
+                        Icon(
+                            Icons.timer_outlined,
+                            size: 70,
+                            color: Colors.white
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          "Interval",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: "Cafe24"
+                          ),
+                        )
+                      ],
+                    ),
+                    onTap: (){
+
+                    },
+                  )
+              )
             ],
           )
         ],
