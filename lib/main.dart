@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:timer/widgets/interval_page.dart';
+import 'package:timer/widgets/sleep_page.dart';
 
 void main() {
   runApp(const App());
@@ -65,7 +67,7 @@ class ChoosePage extends StatelessWidget {
                     ],
                   ),
                   onTap: (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepPage()));
                   },
                 )
               ),
@@ -92,7 +94,7 @@ class ChoosePage extends StatelessWidget {
                       ],
                     ),
                     onTap: (){
-
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const IntervalPage()));
                     },
                   )
               )
