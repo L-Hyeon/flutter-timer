@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timer/widgets/interval/interval_active.dart';
 
 class IntervalPage extends StatefulWidget {
   const IntervalPage({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _IntervalPageState extends State<IntervalPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             const Center(
               child: TText(
                 text: "Interval Timer",
@@ -274,6 +275,29 @@ class _IntervalPageState extends State<IntervalPage> {
                   )
                 ],
               ),
+            ),
+            SizedBox(height: 30),
+            Container(
+              width: 250,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.white,
+                )
+              ),
+              child: InkWell(
+                child: const Center(
+                  child: TText(
+                    text: "Start",
+                    size: 20
+                  )
+                ),
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntervalActive(set: sets, aMin: activeMin.text, aSec: activeSec.text, rMin: restMin.text, rSec: restSec.text)));
+                },
+              )
             )
           ],
         ),
