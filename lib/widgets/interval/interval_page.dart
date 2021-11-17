@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:timer/widgets/interval/interval_active.dart';
 
 class IntervalPage extends StatefulWidget {
@@ -10,10 +11,10 @@ class IntervalPage extends StatefulWidget {
 
 class _IntervalPageState extends State<IntervalPage> {
   int sets = 0;
-  final activeMin = TextEditingController();
-  final activeSec = TextEditingController();
-  final restMin = TextEditingController();
-  final restSec = TextEditingController();
+  final activeMin = TextEditingController(text: "0");
+  final activeSec = TextEditingController(text: "0");
+  final restMin = TextEditingController(text: "0");
+  final restSec = TextEditingController(text: "0");
 
   @override
   Widget build(BuildContext context) {
@@ -89,93 +90,113 @@ class _IntervalPageState extends State<IntervalPage> {
                     )
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    width: 130,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.white
-                      )
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 55,
-                          child: TextField(
-                            controller: activeMin,
-                            decoration: const InputDecoration(
-                              hintText: "00",
-                              hintStyle: TextStyle(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children : [
+                      InkWell(
+                          child: const TText(
+                            text: "-15",
+                            size: 20,
+                          ),
+                          onTap: (){
+                            if (int.parse(activeSec.text) < 15){
+                              return;
+                            }
+                            activeSec.text = (int.parse(activeSec.text) - 15).toString();
+                          }
+                      ),
+                      Container(
+                        width: 130,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.white
+                          )
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 55,
+                              child: TextField(
+                                controller: activeMin,
+                                decoration: const InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1
+                                    )
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1
+                                      )
+                                  )
+                                ),
+                                style: const TextStyle(
                                   fontFamily: "Cafe24",
                                   fontSize: 20,
                                   color: Colors.white
+                                ),
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1
-                                )
+                            ),
+                            const Center(
+                              child: TText(
+                                text: ":",
+                                size: 20,
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1
-                                  )
-                              )
                             ),
-                            style: const TextStyle(
-                              fontFamily: "Cafe24",
-                              fontSize: 20,
-                              color: Colors.white
-                            ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-                        const Center(
-                          child: TText(
-                            text: ":",
-                            size: 20,
-                          ),
-                        ),
-                        Container(
-                          width: 55,
-                          child: TextField(
-                            controller: activeSec,
-                            decoration: const InputDecoration(
-                                hintText: "00",
-                                hintStyle: TextStyle(
+                            Container(
+                              width: 55,
+                              child: TextField(
+                                controller: activeSec,
+                                decoration: const InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1
+                                        )
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1
+                                        )
+                                    )
+                                ),
+                                style: const TextStyle(
                                     fontFamily: "Cafe24",
                                     fontSize: 20,
                                     color: Colors.white
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1
-                                    )
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1
-                                    )
-                                )
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                onChanged: (text){
+                                  if (int.parse(activeSec.text) >= 60){
+                                    activeMin.text = (int.parse(activeMin.text) + 1).toString();
+                                    activeSec.text = (int.parse(activeSec.text) - 60).toString();
+                                  }
+                                },
+                              ),
                             ),
-                            style: const TextStyle(
-                                fontFamily: "Cafe24",
-                                fontSize: 20,
-                                color: Colors.white
-                            ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
+                          ],
+                        )
+                      ),
+                      InkWell(
+                          child: const TText(
+                            text: "+15",
+                            size: 20,
                           ),
-                        ),
-                      ],
-                    ),
+                          onTap: (){
+                            activeSec.text = (int.parse(activeSec.text) + 15).toString();
+                          }
+                      ),
+                    ]
                   ),
                   const SizedBox(height: 20),
                   const Center(
@@ -185,93 +206,117 @@ class _IntervalPageState extends State<IntervalPage> {
                       )
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    width: 130,
-                    height: 70,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            width: 1,
-                            color: Colors.white
-                        )
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 55,
-                          child: TextField(
-                            controller: restMin,
-                            decoration: const InputDecoration(
-                                hintText: "00",
-                                hintStyle: TextStyle(
-                                    fontFamily: "Cafe24",
-                                    fontSize: 20,
-                                    color: Colors.white
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1
-                                    )
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1
-                                    )
-                                )
-                            ),
-                            style: const TextStyle(
-                                fontFamily: "Cafe24",
-                                fontSize: 20,
-                                color: Colors.white
-                            ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-                        const Center(
-                          child: TText(
-                            text: ":",
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                          child: const TText(
+                            text: "-15",
                             size: 20,
                           ),
+                          onTap: (){
+                            if (int.parse(restSec.text) < 15){
+                              return;
+                            }
+                            restSec.text = (int.parse(restSec.text) - 15).toString();
+                          }
+                      ),
+                      Container(
+                        width: 130,
+                        height: 70,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                                width: 1,
+                                color: Colors.white
+                            )
                         ),
-                        Container(
-                          width: 55,
-                          child: TextField(
-                            controller: restSec,
-                            decoration: const InputDecoration(
-                                hintText: "00",
-                                hintStyle: TextStyle(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 55,
+                              child: TextField(
+                                controller: restMin,
+                                decoration: const InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1
+                                        )
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1
+                                        )
+                                    )
+                                ),
+                                style: const TextStyle(
                                     fontFamily: "Cafe24",
                                     fontSize: 20,
                                     color: Colors.white
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            const Center(
+                              child: TText(
+                                text: ":",
+                                size: 20,
+                              ),
+                            ),
+                            Container(
+                              width: 55,
+                              child: TextField(
+                                controller: restSec,
+                                decoration: const InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1
+                                        )
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1
+                                        )
                                     )
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1
-                                    )
-                                )
+                                style: const TextStyle(
+                                    fontFamily: "Cafe24",
+                                    fontSize: 20,
+                                    color: Colors.white
+                                ),
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                onChanged: (text){
+                                  if (int.parse(restSec.text) >= 60){
+                                    restMin.text = (int.parse(restMin.text) + 1).toString();
+                                    restSec.text = (int.parse(restSec.text) - 60).toString();
+                                  }
+                                },
+                              ),
                             ),
-                            style: const TextStyle(
-                                fontFamily: "Cafe24",
-                                fontSize: 20,
-                                color: Colors.white
-                            ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
+                          ],
+                        )
+                      ),
+                      InkWell(
+                          child: const TText(
+                            text: "+15",
+                            size: 20,
                           ),
-                        ),
-                      ],
-                    )
+                          onTap: (){
+                            restSec.text = (int.parse(restSec.text) + 15).toString();
+                            if (int.parse(restSec.text) >= 60){
+                              restMin.text = (int.parse(restMin.text) + 1).toString();
+                              restSec.text = (int.parse(restSec.text) - 60).toString();
+                            }
+                          }
+                      )
+                    ]
                   )
                 ],
               ),
@@ -295,7 +340,11 @@ class _IntervalPageState extends State<IntervalPage> {
                   )
                 ),
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntervalActive(set: sets, aMin: activeMin.text, aSec: activeSec.text, rMin: restMin.text, rSec: restSec.text)));
+                  if (activeMin.text == null || activeSec.text == null || restMin.text == null || restSec.text == null){
+                    Fluttertoast.showToast(msg: "시간을 입력하세요");
+                    return;
+                  }
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => IntervalActive(set: sets, aMin: int.parse(activeMin.text), aSec: int.parse(activeSec.text), rMin: int.parse(restMin.text), rSec: int.parse(restSec.text))));
                 },
               )
             )
