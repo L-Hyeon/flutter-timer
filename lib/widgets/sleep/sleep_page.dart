@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -12,10 +11,34 @@ class SleepPage extends StatefulWidget {
 
 class _SleepPageState extends State<SleepPage> {
   DateTime backPressedTime = DateTime(-1);
-  int sec = 15;
+  int sec = 1;
+  int initSec = 1;
+  int min = 15;
   String state = "Start";
-  CountDownController _controller = CountDownController();
+  Timer? timer;
 
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (sec > 0){
+        setState(() {
+          sec -= 1;
+          if (sec % 60 == 0){
+            min -= 1;
+          }
+        });
+      }
+      else if (sec == 0){
+        setState(() {
+          state = "Start";
+        });
+        stopTimer();
+      }
+    });
+  }
+
+  void stopTimer() {
+    timer?.cancel();
+  }
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
@@ -44,23 +67,25 @@ class _SleepPageState extends State<SleepPage> {
               )
             ),
             const SizedBox(height: 70),
-            CircularCountDownTimer(
+            SizedBox(
               width: 250,
               height: 250,
-              duration: sec,
-              fillColor: Colors.transparent,
-              ringColor: Colors.white,
-              controller: _controller,
-              isReverse: true,
-              textStyle: const TextStyle(
-                fontFamily: "Cafe24",
-                fontSize: 30,
-                color: Colors.white
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  CircularProgressIndicator(
+                    value: sec/initSec,
+                    strokeWidth: 10,
+                    valueColor: const AlwaysStoppedAnimation(Colors.white),
+                  ),
+                  Center(
+                    child: TText(
+                      text: min.toString(),
+                      size: 50,
+                    )
+                  )
+                ]
               ),
-              autoStart: false,
-              onComplete: (){
-                state = "Start";
-              }
             ),
             const SizedBox(height: 70),
             Row(
@@ -70,11 +95,13 @@ class _SleepPageState extends State<SleepPage> {
                   onTap: (){
                     setState(() {
                       if (state == "Start"){
-                        sec += 15;
+                        min += 15;
                         return;
                       }
                       if (sec > 900){
+                        initSec -= 900;
                         sec -= 900;
+                        min -= 15;
                       }
                       else {
                         Fluttertoast.showToast(msg: "15분도 안 남았습니다");
@@ -88,20 +115,22 @@ class _SleepPageState extends State<SleepPage> {
                 ),
                 InkWell(
                   onTap: (){
-                    if (state == "Stop"){
-                      state = "Resume";
-                      _controller.pause();
-                    }
-                    else if (sec == 0){
-                      state = "Stop";
-                      sec *= 60;
-                      print(sec);
-                      _controller.start();
-                    }
-                    else {
-                      state = "Stop";
-                      _controller.resume();
-                    }
+                    setState(() {
+                      if (state == "Pause"){
+                        state = "Resume";
+                        stopTimer();
+                      }
+                      else if (state == "Start"){
+                        state = "Pause";
+                        initSec = 60*min;
+                        sec = initSec;
+                        startTimer();
+                      }
+                      else {
+                        state = "Pause";
+                        startTimer();
+                      }
+                    });
                   },
                   child: TText(
                     text: state,
@@ -112,10 +141,12 @@ class _SleepPageState extends State<SleepPage> {
                   onTap: (){
                     setState(() {
                       if (state == "Start"){
-                        sec += 15;
+                        min += 15;
                         return;
                       }
+                      min += 15;
                       sec += 900;
+                      initSec += 900;
                     });
                   },
                   child: const TText(
