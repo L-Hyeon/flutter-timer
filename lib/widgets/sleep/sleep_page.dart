@@ -155,6 +155,51 @@ class _SleepPageState extends State<SleepPage> {
                   ),
                 )
               ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      if (state == "Start"){
+                        min += 1;
+                        return;
+                      }
+                      if (sec > 60){
+                        initSec -= 60;
+                        sec -= 60;
+                        min -= 1;
+                      }
+                      else {
+                        Fluttertoast.showToast(msg: "1분도 안 남았습니다");
+                      }
+                    });
+                  },
+                  child: const TText(
+                    text: "-1",
+                    size: 30,
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      if (state == "Start"){
+                        min += 1;
+                        return;
+                      }
+                      min += 1;
+                      sec += 60;
+                      initSec += 60;
+                    });
+                  },
+                  child: const TText(
+                    text: "+1",
+                    size: 30,
+                  ),
+                )
+              ],
             )
           ],
         ),
